@@ -1,0 +1,73 @@
+<div class="p-6 max-w-7xl mx-auto space-y-6">
+
+  <div class="flex justify-between items-center border-b pb-4">
+    <h1 class="text-2xl font-bold text-gray-800">Painel de Controle - Helpdesk</h1>
+    <button (click)="carregarMetricas()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
+      Atualizar
+    </button>
+  </div>
+
+  <!-- Estado de Carregamento -->
+  <div *ngIf="loading" class="text-center py-12">
+    <p class="text-gray-500 font-medium">Carregando métricas do sistema...</p>
+  </div>
+
+  <!-- Mensagem de Erro -->
+  <div *ngIf="error && !loading" class="bg-red-50 border-l-4 border-red-500 p-4 rounded text-red-700">
+    <p class="font-bold">Atenção</p>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div *ngIf="metrics && !loading" class="space-y-6">
+
+    <!-- Seção: Status dos Atendimentos -->
+    <h2 class="text-lg font-semibold text-gray-700">Status dos Chamados</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Total de Chamados</p>
+        <p class="text-3xl font-extrabold text-gray-900 mt-2">{{ metrics.totalChamados }}</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm border-l-4 border-l-yellow-400">
+        <p class="text-sm font-medium text-gray-500">Em Aberto</p>
+        <p class="text-3xl font-extrabold text-yellow-600 mt-2">{{ metrics.totalAbertos }}</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm border-l-4 border-l-blue-400">
+        <p class="text-sm font-medium text-gray-500">Em Andamento</p>
+        <p class="text-3xl font-extrabold text-blue-600 mt-2">{{ metrics.totalEmAndamento }}</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm border-l-4 border-l-green-400">
+        <p class="text-sm font-medium text-gray-500">Fechados</p>
+        <p class="text-3xl font-extrabold text-green-600 mt-2">{{ metrics.totalFechados }}</p>
+      </div>
+
+    </div>
+
+    <!-- Seção: Prioridades -->
+    <h2 class="text-lg font-semibold text-gray-700">Distribuição por Prioridade</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Baixa Prioridade</p>
+        <p class="text-2xl font-bold text-gray-700 mt-2">{{ metrics.totalPrioridadeBaixa }}</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Média Prioridade</p>
+        <p class="text-2xl font-bold text-orange-600 mt-2">{{ metrics.totalPrioridadeMedia }}</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Alta Prioridade</p>
+        <p class="text-2xl font-bold text-red-600 mt-2">{{ metrics.totalPrioridadeAlta }}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

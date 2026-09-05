@@ -1,0 +1,83 @@
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">Abrir Novo Chamado</h2>
+
+  <!-- Alerta de Erro -->
+  <div *ngIf="mensagemErro" class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+    <p class="font-bold">Atenção</p>
+    <p>{{ mensagemErro }}</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="salvar()" class="space-y-6">
+
+    <!-- Seleção e Vinculação do Cliente -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Cliente *</label>
+     <select formControlName="clienteId"
+      class="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+     <option value="">-- Selecione o Cliente Vinculado --</option>
+     <option *ngFor="let cliente of clientes" [value]="cliente.id">
+      {{ cliente.nome }} - {{ cliente.cpfOuCnpj || cliente.email }}
+   </option>
+     </select>
+      <div *ngIf="form.get('clienteId')?.touched && form.get('clienteId')?.invalid" class="text-red-500 text-xs mt-1">
+        A seleção do cliente é obrigatória.
+      </div>
+    </div>
+
+    <!-- Título do Chamado -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Título do Chamado *</label>
+      <input type="text" formControlName="titulo" placeholder="Ex: Problema com emissão de nota fiscal"
+        class="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+      <div *ngIf="form.get('titulo')?.touched && form.get('titulo')?.invalid" class="text-red-500 text-xs mt-1">
+        Informe um título com no mínimo 5 caracteres.
+      </div>
+    </div>
+
+    <!-- Prioridade e Setor -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Prioridade *</label>
+        <select formControlName="prioridade"
+          class="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          <option value="BAIXA">Baixa</option>
+          <option value="MEDIA">Média</option>
+          <option value="ALTA">Alta</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Setor *</label>
+        <select formControlName="setor"
+          class="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          <option value="SUPORTE">Suporte Técnico</option>
+          <option value="FINANCEIRO">Financeiro</option>
+          <option value="VENDAS">Vendas</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Descrição -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Descrição Detalhada *</label>
+      <textarea formControlName="descricao" rows="4" placeholder="Descreva o problema em detalhes..."
+        class="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+      <div *ngIf="form.get('descricao')?.touched && form.get('descricao')?.invalid" class="text-red-500 text-xs mt-1">
+        Informe uma descrição detalhada com pelo menos 10 caracteres.
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="flex justify-end space-x-3 pt-6 border-t">
+      <a routerLink="/dashboard"
+        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+        Cancelar
+      </a>
+      <button type="submit"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700">
+        Abrir Chamado
+      </button>
+    </div>
+
+  </form>
+</div>
