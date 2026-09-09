@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AtualizarChamadoDTO {
     private Long id;
-    private LocalDate dataInicial;
     private LocalDate dataFinal;
     private String assunto;
     private Setor setor;

@@ -24,6 +24,7 @@
     <div *ngIf="chamadoEncontrado" class="card-detalhes mt-4 p-4 bg-white border rounded-md shadow-sm">
       <h4 class="font-bold text-gray-700 mb-2">Informações do Chamado Encontrado</h4>
       <p><strong>Protocolo:</strong> {{ chamadoEncontrado.protocolo }}</p>
+      <p><strong>Assunto:</strong> {{ chamadoEncontrado.assunto }}</p>
       <p><strong>Descrição:</strong> {{ chamadoEncontrado.descricao }}</p>
       <p><strong>Prioridade:</strong> <span [ngClass]="getPrioridadeClass(chamadoEncontrado.prioridade)">{{ chamadoEncontrado.prioridade }}</span></p>
       <p><strong>Status:</strong> <span [ngClass]="getStatusClass(chamadoEncontrado.status)">{{ chamadoEncontrado.status }}</span></p>

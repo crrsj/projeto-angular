@@ -18,6 +18,8 @@ export class DashboardComponent implements OnInit {
   error = '';
 
   ngOnInit(): void {
+    console.log('-> ATENÇÃO: Entrou no DashboardComponent (ngOnInit)');
+  
     this.carregarMetricas();
   }
 

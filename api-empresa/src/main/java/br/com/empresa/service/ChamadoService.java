@@ -189,4 +189,10 @@ public class ChamadoService {
 
         return new ByteArrayInputStream(out.toByteArray());
     }
+
+        public void excluirChamado(Long id) {
+
+        var chamado = buscarPorIdOuLancarExcessao(id);
+        chamadoRepository.delete(chamado);
+       }
 }

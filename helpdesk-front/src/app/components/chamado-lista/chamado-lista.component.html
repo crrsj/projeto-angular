@@ -1,0 +1,192 @@
+<div class="max-w-7xl mx-auto p-6">
+  <!-- Cabeçalho -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Gerenciamento de Chamados</h1>
+      <p class="text-sm text-gray-500">Acompanhe e gerencie os atendimentos do sistema.</p>
+    </div>
+    <button routerLink="/chamados/novo" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow transition flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Novo Chamado
+    </button>
+  </div>
+
+  <!-- Tabela de Chamados -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider border-b border-gray-200">
+            <th class="py-3 px-6">Protocolo</th>
+            <th class="py-3 px-6">Assunto</th>
+            <th class="py-3 px-6">Descrição</th>
+            <th class="py-3 px-6">Prioridade</th>
+            <th class="py-3 px-6">Status</th>
+            <th class="py-3 px-6 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+          <!-- Loop dinâmico percorrendo a lista de chamados vindos do Spring Boot -->
+          <tr *ngFor="let chamado of chamados" class="hover:bg-gray-50 transition">
+            <td class="py-4 px-6 font-medium text-gray-900">{{ chamado.protocolo }}</td>
+             <td class="py-4 px-6 text-gray-700">{{ chamado.assunto }}</td>
+            <td class="py-4 px-6 truncate max-w-xs">{{ chamado.descricao }}</td>
+            <!-- Badge de Prioridade Dinâmico -->
+            <td class="py-4 px-6">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getPrioridadeBadgeClass(chamado.prioridade)">
+                {{ chamado.prioridade }}
+              </span>
+            </td>
+
+            <!-- Badge de Status Dinâmico -->
+            <td class="py-4 px-6">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusBadgeClass(chamado.status)">
+                {{ chamado.status }}
+              </span>
+            </td>
+
+            <!-- Ações -->
+            <td class="py-4 px-6 text-center space-x-2">
+            <div class="flex items-center justify-center gap-3">
+             <button (click)="abrirDetalhes(chamado)" class="text-blue-500 hover:text-blue-700 transition" title="Detalhes">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+            </button>
+            <button (click)="abrirEdicao(chamado)" class="text-amber-500 hover:text-amber-700 transition" title="Editar">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+             </svg>
+           </button>
+              <button title="Excluir" (click)="excluir(chamado.id!)" class="text-red-600 hover:text-red-800 p-1 rounded transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+             </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Modal de Detalhes do Chamado -->
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all animate-fadeIn">
+
+    <!-- Cabeçalho do Modal -->
+    <div class="bg-blue-600 px-6 py-4 flex justify-between items-center text-white">
+      <h3 class="text-lg font-semibold flex items-center gap-2">
+        <span>📄 Detalhes do Chamado</span>
+      </h3>
+      <button (click)="fecharModal()" class="text-white hover:text-gray-200 text-2xl font-bold">&times;</button>
+    </div>
+
+    <!-- Corpo do Modal -->
+    <div class="p-6 space-y-4 text-gray-700 max-h-[75vh] overflow-y-auto">
+      <div class="grid grid-cols-2 gap-4 border-b pb-4">
+        <div>
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Protocolo</span>
+          <p class="text-sm font-semibold text-gray-900">{{ chamadoSelecionado?.protocolo }}</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Status</span>
+          <p class="mt-1">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+              {{ chamadoSelecionado?.status }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 border-b pb-4">
+        <div>
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Setor</span>
+          <p class="text-sm text-gray-900">{{ chamadoSelecionado?.setor }}</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Prioridade</span>
+          <p class="text-sm text-gray-900">{{ chamadoSelecionado?.prioridade }}</p>
+        </div>
+      </div>
+
+      <div class="border-b pb-4">
+        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Descrição</span>
+        <p class="text-sm text-gray-800 mt-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
+          {{ chamadoSelecionado?.descricao }}
+        </p>
+      </div>
+
+      <!-- Informações do Cliente Vinculado -->
+      <div *ngIf="chamadoSelecionado?.cliente" class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
+        <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Informações do Cliente</h4>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <div><strong class="text-gray-500">Nome:</strong> {{ chamadoSelecionado?.cliente?.nome }}</div>
+          <div><strong class="text-gray-500">CPF:</strong> {{ chamadoSelecionado?.cliente?.cpf }}</div>
+          <div><strong class="text-gray-500">Telefone:</strong> {{ chamadoSelecionado?.cliente?.telefone }}</div>
+          <div><strong class="text-gray-500">E-mail:</strong> {{ chamadoSelecionado?.cliente?.email }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé do Modal -->
+    <div class="bg-gray-50 px-6 py-3 flex justify-end">
+      <button (click)="fecharModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+        Fechar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modal de Edição -->
+<div *ngIf="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+
+    <!-- Cabeçalho -->
+    <div class="bg-amber-600 px-6 py-4 flex justify-between items-center text-white">
+      <h3 class="text-lg font-semibold">✏️ Editar Chamado</h3>
+      <button (click)="fecharModalEdicao()" class="text-white hover:text-gray-200 text-2xl font-bold">&times;</button>
+    </div>
+
+    <!-- Formulário -->
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase">Assunto</label>
+        <input type="text" [(ngModel)]="chamadoEmEdicao.assunto" class="w-full mt-1 border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase">Setor</label>
+          <input type="text" [(ngModel)]="chamadoEmEdicao.setor" class="w-full mt-1 border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase">Data Final</label>
+          <input type="date" [(ngModel)]="chamadoEmEdicao.dataFinal" class="w-full mt-1 border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase">Descrição</label>
+        <textarea [(ngModel)]="chamadoEmEdicao.descricao" rows="4" class="w-full mt-1 border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-amber-500 outline-none"></textarea>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="bg-gray-50 px-6 py-3 flex justify-end gap-2">
+      <button (click)="fecharModalEdicao()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+        Cancelar
+      </button>
+      <button (click)="salvarEdicao()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium transition">
+        Salvar Alterações
+      </button>
+    </div>
+
+  </div>
+</div>

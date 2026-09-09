@@ -24,13 +24,12 @@
       </div>
     </div>
 
-    <!-- Título do Chamado -->
     <div>
-      <label class="block text-sm font-medium text-gray-700">Título do Chamado *</label>
-      <input type="text" formControlName="titulo" placeholder="Ex: Problema com emissão de nota fiscal"
+      <label class="block text-sm font-medium text-gray-700">Assunto *</label>
+      <input type="text" formControlName="assunto" placeholder="Ex: Problema com emissão de nota fiscal"
         class="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-      <div *ngIf="form.get('titulo')?.touched && form.get('titulo')?.invalid" class="text-red-500 text-xs mt-1">
-        Informe um título com no mínimo 5 caracteres.
+      <div *ngIf="form.get('assunto')?.touched && form.get('assunto')?.invalid" class="text-red-500 text-xs mt-1">
+        Informe um assunto com no mínimo 5 caracteres.
       </div>
     </div>
 

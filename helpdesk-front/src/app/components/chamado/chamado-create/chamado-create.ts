@@ -21,7 +21,7 @@ export class ChamadoCreateComponent implements OnInit {
 
   form: FormGroup = this.fb.group({
     clienteId: ['', [Validators.required]],
-    titulo: ['', [Validators.required, Validators.minLength(5)]],
+   assunto: ['', [Validators.required, Validators.minLength(5)]],
     descricao: ['', [Validators.required, Validators.minLength(10)]],
     prioridade: ['MEDIA', [Validators.required]],
     setor: ['SUPORTE', [Validators.required]]

@@ -81,6 +81,8 @@ export class ChamadoDetalheComponent implements OnInit {
     });
   }
 
+  /*
+
   pesquisarPorProtocolo(): void {
     if (!this.protocoloBusca) return;
 
@@ -96,6 +98,35 @@ export class ChamadoDetalheComponent implements OnInit {
     });
   }
 
+  */
+
+  pesquisarPorProtocolo() {
+  if (!this.protocoloBusca.trim()) {
+    this.mensagemErro = 'Por favor, digite um protocolo válido.';
+    return;
+  }
+
+  this.mensagemErro = '';
+  this.mensagemSucesso = '';
+
+  this.chamadoService.buscarPorProtocolo(this.protocoloBusca).subscribe({
+    next: (dados) => {
+      this.chamadoEncontrado = dados;
+
+      // Vincula o ID retornado ao contexto e carrega o histórico automaticamente
+      if (dados && dados.id) {
+        this.chamadoId = dados.id;
+        this.carregarRespostas();
+      }
+    },
+    error: (erro) => {
+      this.chamadoEncontrado = null;
+      this.respostas = [];
+      this.mensagemErro = 'Chamado não encontrado para o protocolo informado.';
+    }
+  });
+}
+
   getPrioridadeClass(prioridade: string): string {
     switch (prioridade) {
       case 'ALTA': return 'badge-prioridade-alta';
@@ -104,6 +135,8 @@ export class ChamadoDetalheComponent implements OnInit {
       default: return 'badge-secondary';
     }
   }
+
+
 
   getStatusClass(status: string): string {
     switch (status) {

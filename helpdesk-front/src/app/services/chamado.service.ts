@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChamadoDTO } from '../models/chamado.model';
-
+import { AtualizarChamadoDTO } from '../models/chamado.model'; // Ajuste o caminho relativo se necessário
 
 @Injectable({
   providedIn: 'root'
@@ -27,4 +27,18 @@ export class ChamadoService {
   const params = new HttpParams().set('protocolo', protocolo);
   return this.http.get<any>(`${this.apiUrl}/protocolo`, { params });
 }
+
+  listarTodos(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
+
+
+ atualizar(id: number, chamado: AtualizarChamadoDTO): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, chamado);
+  }
+
+  deletar(id: number): Observable<any> {
+  return this.http.delete<any>(`${this.apiUrl}/${id}`);
+}
+
 }

@@ -1,0 +1,157 @@
+<div class="max-w-7xl mx-auto p-6">
+  <!-- Cabeçalho -->
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Gerenciamento de Clientes</h1>
+      <p class="text-sm text-gray-500">Acompanhe e gerencie os clientes cadastrados no sistema.</p>
+    </div>
+    <button routerLink="/clientes/novo" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2">
+      + Novo Cliente
+    </button>
+  </div>
+
+  <!-- Tabela de Clientes -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider border-b border-gray-200">
+            <th class="py-3 px-6">Nome</th>
+            <th class="py-3 px-6">CPF/CNPJ</th>
+            <th class="py-3 px-6">E-mail</th>
+            <th class="py-3 px-6 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+          <tr *ngFor="let cliente of clientes" class="hover:bg-gray-50 transition">
+            <td class="py-4 px-6 font-medium text-gray-900">{{ cliente.nome }}</td>
+            <td class="py-4 px-6">{{ cliente.cpfOuCnpj }}</td>
+            <td class="py-4 px-6">{{ cliente.email }}</td>
+          <td class="py-4 px-6 text-center space-x-2">
+          <!-- Botão Detalhes -->
+           <button (click)="abrirDetalhes(cliente.id!)" class="text-blue-600 hover:text-blue-800 font-medium text-sm transition">
+             Detalhes
+          </button>
+
+             <!-- Botão Editar -->
+            <button (click)="abrirEdicao(cliente.id!)" class="text-amber-600 hover:text-amber-800 font-medium text-sm transition">
+               Editar
+            </button>
+
+             <!-- Botão Excluir -->
+              <button (click)="excluir(cliente.id!)" class="text-red-600 hover:text-red-800 font-medium text-sm transition">
+                Excluir
+              </button>
+           </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Adicione este bloco no final do arquivo HTML, antes de fechar a div principal -->
+<div *ngIf="modalAberto" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative">
+    <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+      <h3 class="text-lg font-bold text-gray-800">Detalhes do Cliente</h3>
+      <button (click)="fecharModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+    </div>
+
+    <div *ngIf="clienteSelecionado" class="mt-4 space-y-3 text-sm text-gray-700">
+      <div><span class="font-semibold">ID:</span> {{ clienteSelecionado.id }}</div>
+      <div><span class="font-semibold">Nome:</span> {{ clienteSelecionado.nome }}</div>
+      <div><span class="font-semibold">CPF/CNPJ:</span> {{ clienteSelecionado.cpfOuCnpj }}</div>
+      <div><span class="font-semibold">E-mail:</span> {{ clienteSelecionado.email }}</div>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+      <button (click)="fecharModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="modalEdicaoAberto" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative">
+    <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+      <h3 class="text-lg font-bold text-gray-800">Editar Cliente</h3>
+      <button (click)="fecharModalEdicao()" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+    </div>
+
+    <form (ngSubmit)="salvarEdicao()" class="mt-4 space-y-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-700">Nome</label>
+    <input type="text" [(ngModel)]="clienteEdicao.nome" name="nome" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700">CPF/CNPJ (Não editável)</label>
+    <input type="text" [(ngModel)]="clienteEdicao.cpfOuCnpj" name="cpfOuCnpj" readonly class="mt-1 block w-full rounded-md bg-gray-100 border-gray-300 shadow-sm border p-2 text-sm text-gray-500 cursor-not-allowed">
+  </div>
+
+  <div>
+  <label class="block text-sm font-medium text-gray-700">Telefone</label>
+  <input type="text" [(ngModel)]="clienteEdicao.telefone" name="telefone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+</div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-700">E-mail</label>
+    <input type="email" [(ngModel)]="clienteEdicao.email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+  </div>
+
+
+
+  <div class="border-t pt-3 mt-3 space-y-3">
+  <h4 class="text-sm font-bold text-gray-700">Endereço</h4>
+
+  <div class="grid grid-cols-3 gap-2">
+    <div>
+      <label class="block text-xs font-medium text-gray-700">CEP</label>
+      <input type="text" [(ngModel)]="clienteEdicao.endereco.cep" name="cep" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-700">Número</label>
+      <input type="text" [(ngModel)]="clienteEdicao.endereco.numero" name="numero" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-700">Complemento</label>
+      <input type="text" [(ngModel)]="clienteEdicao.endereco.complemento" name="complemento" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-xs font-medium text-gray-700">Logradouro</label>
+    <input type="text" [(ngModel)]="clienteEdicao.endereco.logradouro" name="logradouro" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+  </div>
+
+  <div class="grid grid-cols-4 gap-2">
+    <div class="col-span-2">
+      <label class="block text-xs font-medium text-gray-700">Bairro</label>
+      <input type="text" [(ngModel)]="clienteEdicao.endereco.bairro" name="bairro" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-700">Cidade</label>
+      <input type="text" [(ngModel)]="clienteEdicao.endereco.cidade" name="cidade" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-700">UF</label>
+      <input type="text" [(ngModel)]="clienteEdicao.endereco.uf" name="uf" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+    </div>
+  </div>
+</div>
+
+
+  <div class="mt-6 flex justify-end space-x-2">
+    <button type="button" (click)="fecharModalEdicao()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition">
+      Cancelar
+    </button>
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition">
+      Salvar Alterações
+    </button>
+  </div>
+</form>
+
+  </div>
+</div>

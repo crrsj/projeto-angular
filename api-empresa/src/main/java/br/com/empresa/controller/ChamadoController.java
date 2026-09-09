@@ -117,4 +117,11 @@ public class ChamadoController {
     public ResponseEntity<AtualizarChamadoDTO>atualizarChamados(@PathVariable Long id, @RequestBody AtualizarChamadoDTO dto){
         return ResponseEntity.status(HttpStatus.OK).body(chamadoService.atualizarChamado(id,dto));
     }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>excluirChamado(@PathVariable Long id){
+        chamadoService.excluirChamado(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
