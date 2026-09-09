@@ -15,5 +15,6 @@ export const routes: Routes = [
   { path: 'chamados/:id', component: ChamadoDetalheComponent },
   { path: 'clientes', component: ClienteListaComponent },
   { path: 'clientes/novo', component: ClienteCreateComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent }
 ];

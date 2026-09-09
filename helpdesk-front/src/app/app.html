@@ -1,1 +1,34 @@
-<router-outlet></router-outlet>
+<div class="flex h-screen bg-gray-100">
+  <!-- Sidebar Flutuante -->
+  <aside class="w-64 bg-white shadow-xl m-4 rounded-2xl flex flex-col justify-between p-4">
+    <div>
+      <div class="flex items-center justify-center h-16 border-b border-gray-100 mb-6">
+        <span class="font-bold text-lg text-gray-800">HelpDesk System</span>
+      </div>
+
+      <nav class="space-y-2">
+      <a routerLink="/dashboard" routerLinkActive="bg-blue-50 text-blue-600 font-semibold" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
+           Dashboard
+       </a>
+       <a routerLink="/clientes" routerLinkActive="bg-blue-50 text-blue-600 font-semibold" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
+         Cliente
+        </a>
+     <a routerLink="/chamados" routerLinkActive="bg-blue-50 text-blue-600 font-semibold" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
+         Chamado
+       </a>
+    <a routerLink="/respostas" routerLinkActive="bg-blue-50 text-blue-600 font-semibold" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
+      Resposta do Chamado
+     </a>
+      </nav>
+    </div>
+
+    <div class="border-t border-gray-100 pt-4 text-xs text-gray-400 text-center">
+      v1.0.0 - Standalone
+    </div>
+  </aside>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 my-4 mr-4 bg-white shadow-xl rounded-2xl p-8 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>
