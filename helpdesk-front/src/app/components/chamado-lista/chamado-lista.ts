@@ -14,60 +14,6 @@ import { FormsModule } from '@angular/forms';
 
 })
 
-/*
-
-export class ChamadoListaComponent implements OnInit {
-
-  chamados: ChamadoDTO[] = [];
-
-  constructor(private chamadoService: ChamadoService, private router: Router) {console.log('ChamadoListaComponent foi instanciado com sucesso!');}
-
-  ngOnInit(): void {
-    console.log('-> SUCESSO: Entrou no ChamadoListaComponent (ngOnInit)');
-    this.carregarChamados();
-  }
-
- carregarChamados() {
-    this.chamadoService.listarTodos().subscribe({
-      next: (resposta) => {
-        this.chamados = resposta.content; // O Spring Boot retorna um objeto Page contendo a lista em 'content'
-      },
-      error: (erro) => {
-        console.error('Erro ao carregar chamados:', erro);
-      }
-    });
-  }
-
-  getStatusBadgeClass(status: string): string {
-    switch (status) {
-      case 'ABERTO':
-        return 'bg-blue-100 text-blue-800';
-      case 'EM_ANDAMENTO':
-        return 'bg-amber-100 text-amber-800';
-      case 'FECHADO':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  }
-
-  getPrioridadeBadgeClass(prioridade: string): string {
-    switch (prioridade) {
-      case 'ALTA':
-        return 'bg-red-100 text-red-800';
-      case 'MEDIA':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'BAIXA':
-        return 'bg-emerald-100 text-emerald-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  }
-
-
-}
-
-*/
 export class ChamadoListaComponent implements OnInit {
 
   chamados: ChamadoDTO[] = [];
@@ -179,6 +125,31 @@ export class ChamadoListaComponent implements OnInit {
       }
     });
   }
+}
+
+
+protocoloBusca: string = '';
+
+
+pesquisarPorProtocolo(): void {
+  if (!this.protocoloBusca.trim()) {
+    // Se o campo estiver vazio, recarrega todos os chamados da tabela
+    this.carregarChamados();
+    return;
+  }
+
+  this.chamadoService.buscarPorProtocolo(this.protocoloBusca).subscribe({
+    next: (chamado) => {
+      // Como a busca por protocolo geralmente retorna um único objeto,
+      // colocamos ele dentro de um array para exibir na tabela
+      this.chamados = chamado ? [chamado] : [];
+    },
+    error: (err) => {
+      console.error('Chamado não encontrado', err);
+      this.chamados = [];
+      alert('Nenhum chamado encontrado para este protocolo.');
+    }
+  });
 }
 
 }

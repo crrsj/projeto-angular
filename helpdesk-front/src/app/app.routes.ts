@@ -8,6 +8,7 @@ import { ClienteListaComponent } from './components/cliente-lista/cliente-lista'
 
 
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'chamados', pathMatch: 'full' },
   { path: 'chamados', component: ChamadoListaComponent },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'chamados/:id', component: ChamadoDetalheComponent },
   { path: 'clientes', component: ClienteListaComponent },
   { path: 'clientes/novo', component: ClienteCreateComponent },
+  { path: 'chamados/detalhes/:id', component: ChamadoDetalheComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent }
 ];
